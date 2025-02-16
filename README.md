@@ -65,6 +65,9 @@ Create a `.env` file in the root directory and add your secret key:
 ```py
 SECRET_KEY=your-secret-key-here
 ```
+
+---
+
 ## Running the Application
 1. Start the Flask development server:
 
@@ -87,7 +90,7 @@ http://localhost:5000
   
   - Download the ZIP file when ready.
 
-**  2. Upload and Analyze:**
+  **2. Upload and Analyze:**
 
   - Visit the application homepage.
   
@@ -97,7 +100,7 @@ http://localhost:5000
   
   - Explore the generated visualizations and metrics.
 
-**  3. Export Your Results:**
+  **3. Export Your Results:**
 
   - Click the "Export Full Data Package" button to download all charts and raw data as a ZIP file.
 
