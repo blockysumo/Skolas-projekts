@@ -2,9 +2,10 @@
 
 A Flask-based web application that analyzes your Spotify listening history and provides insightful visualizations and statistics. Upload your Spotify data export (ZIP file) and explore your listening habits through interactive charts and metrics.
 
-![Dashboard Preview]([https://via.placeholder.com/800x400.png?text=Dashboard+Preview](https://imgur.com/fQMb9UO)) <!-- Replace with actual screenshot -->
+![vivaldi_hYawsGebIf](https://github.com/user-attachments/assets/4cdddf66-be5c-43f0-83aa-0f0b5e453588)
 
 ---
+
 
 ## Features
 
