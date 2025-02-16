@@ -1,2 +1,2 @@
-# Filmas-Skolas-projekts
+# Skolas-projekts
 ...
