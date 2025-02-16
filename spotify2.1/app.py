@@ -263,6 +263,10 @@ def continue_processing():
     
     return redirect(url_for('upload_file'))
 
+@app.route('/tutorial')
+def show_tutorial():
+    return render_template('tutorial.html', current_year=datetime.now().year)
+
 @app.route('/stats')
 def show_stats():
     try:

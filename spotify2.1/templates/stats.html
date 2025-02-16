@@ -3,69 +3,7 @@
 <head>
     <title>Spotify Statistics</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Arial', sans-serif;
-        }
-        .plot-container {
-            background: white;
-            border-radius: 15px;
-            padding: 25px;
-            margin: 20px 0;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            transition: transform 0.2s;
-        }
-        .plot-container:hover {
-            transform: translateY(-3px);
-        }
-        .plot-img {
-            width: 100%;
-            height: auto;
-            max-height: 600px;
-            object-fit: contain;
-        }
-        .metric-card {
-            background: white;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 10px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .spotify-green {
-            color: #1DB954;
-            font-weight: bold;
-        }
-        .table-hover tbody tr:hover {
-            background-color: rgba(29, 185, 84, 0.1);
-        }
-        thead {
-            background-color: #1DB954;
-            color: white;
-        }
-        .heatmap-labels {
-            font-size: 0.9em;
-            color: #666;
-        }
-        .sortable {
-            cursor: pointer;
-            position: relative;
-        }
-        .sortable::after {
-            content: "↕";
-            margin-left: 5px;
-            font-size: 0.8em;
-            color: rgba(255, 255, 255, 0.5);
-        }
-        .sortable.asc::after {
-            content: "↑";
-            color: white;
-        }
-        .sortable.desc::after {
-            content: "↓";
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='Styledeez.css') }}">
 </head>
 <body class="bg-light">
     <div class="container py-5">
@@ -156,7 +94,7 @@
                     <tbody>
                         {% for track in metrics.top_tracks %}
                         <tr>
-                            <td class="fw-bold">{{ track.master_metadata_track_name }}</td>
+                            <td class="dark-text">{{ track.master_metadata_track_name }}</td>
                             <td>{{ track.artist }}</td>
                             <td>{{ track.plays }}</td>
                             <td data-ms="{{ track.total_ms }}">{{ track.total_time }}</td>
@@ -191,92 +129,19 @@
             <a href="{{ url_for('export_data') }}" class="btn btn-success spotify-green">
                 📤 Export Full Data Package
             </a>
-            <small class="d-block mt-2 text-muted">Includes all charts + CSV data</small>
+            <small class="d-block mt-2" style="color: azure">
+                Includes all charts + CSV data
+            </small>
         </div>
 
         <footer class="text-center mt-5 text-muted">
-            <small>
+            <small style="color: azure;">
                 Generated on {{ current_year }} • 
                 <a href="/" class="text-decoration-none spotify-green">Analyze another file</a>
             </small>
         </footer>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            updateVisibleRows();
-        });
-    
-        function updateVisibleRows() {
-            const rows = document.querySelectorAll('.table-hover tbody tr');
-            rows.forEach((row, index) => {
-                row.style.display = index < 10 ? '' : 'none';
-            });
-        }
-    
-        function sortTable(columnIndex, isNumeric = false) {
-            const table = document.querySelector('.table-hover');
-            const tbody = table.querySelector('tbody');
-            const rows = Array.from(tbody.querySelectorAll('tr'));
-            const header = table.querySelectorAll('th')[columnIndex];
-            
-            // Toggle sorting direction
-            const isAsc = !header.classList.contains('asc');
-            header.classList.remove('asc', 'desc');
-            header.classList.add(isAsc ? 'asc' : 'desc');
-    
-            rows.sort((a, b) => {
-                const aVal = getSortValue(a, columnIndex);
-                const bVal = getSortValue(b, columnIndex);
-                
-                if (columnIndex <= 1) { // Track and Artist columns
-                    return isAsc ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-                }
-                return isAsc ? aVal - bVal : bVal - aVal;
-            });
-    
-            // Rebuild table
-            rows.forEach(row => tbody.appendChild(row));
-            updateVisibleRows();
-        }
-    
-        function getSortValue(row, columnIndex) {
-            const cell = row.children[columnIndex];
-            switch(columnIndex) {
-                case 0: // Track
-                case 1: // Artist
-                    return cell.textContent.trim().toLowerCase();
-                
-                case 3: // Total Time
-                    return parseInt(cell.dataset.ms); // Use raw ms value
-                    
-                case 2: // Plays
-                    return parseInt(cell.textContent);
-                    
-                default:
-                    return 0;
-            }
-        }
-    
-        function sortSkipRate(columnIndex) {
-            const table = document.querySelector('.table-hover');
-            const tbody = table.querySelector('tbody');
-            const rows = Array.from(tbody.querySelectorAll('tr'));
-            const header = table.querySelectorAll('th')[columnIndex];
-            
-            const isAsc = !header.classList.contains('asc');
-            header.classList.remove('asc', 'desc');
-            header.classList.add(isAsc ? 'asc' : 'desc');
-    
-            rows.sort((a, b) => {
-                const aRate = parseFloat(a.children[columnIndex].querySelector('.badge').textContent);
-                const bRate = parseFloat(b.children[columnIndex].querySelector('.badge').textContent);
-                return isAsc ? aRate - bRate : bRate - aRate;
-            });
-    
-            rows.forEach(row => tbody.appendChild(row));
-            updateVisibleRows();
-        }
-    </script>
+    <script defer src='/static/table_script.js'></script>
 </body>
 </html>
