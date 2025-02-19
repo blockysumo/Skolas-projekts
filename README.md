@@ -46,7 +46,7 @@ A Flask-based web application that analyzes your Spotify listening history and p
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-username/spotify-listening-analyzer.git
+   git clone [https://github.com/your-username/spotify-listening-analyzer.git](https://github.com/blockysumo/Skolas-projekts.git)
    cd spotify-listening-analyzer
 
 2. Create a virtual environment:
