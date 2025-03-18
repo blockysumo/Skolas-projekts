@@ -14,7 +14,6 @@ A Flask-based web application that analyzes your Spotify listening history and p
   - Hourly and weekly listening patterns
   - Top artists and tracks
   - Track skip rates and duration preferences
-  - Rickroll detection (because why not? 🎵)
 
 - **Interactive Visualizations**:
   - Yearly listening trends
