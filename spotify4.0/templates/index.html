@@ -1,0 +1,100 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4">Spotify Data Analyzer</h1>
+    <p class="lead">Discover insights from your Spotify listening history</p>
+    <hr class="my-4">
+    <p>Upload your Spotify Extended Streaming History ZIP file to get started</p>
+    
+    {% if error %}
+    <div class="alert alert-danger" role="alert">
+        {{ error }}
+    </div>
+    {% endif %}
+    
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Upload Your Data</h5>
+            <p class="card-text">
+                To analyze your Spotify listening history, you need to upload the ZIP file containing your Spotify Extended Streaming History.
+                You can request this data from Spotify by going to your account settings and requesting your data.
+            </p>
+            
+            <form action="{{ url_for('upload') }}" method="post" enctype="multipart/form-data" class="mt-4">
+                <div class="custom-file mb-3">
+                    <input type="file" class="custom-file-input" id="customFile" name="spotify_zip" accept=".zip">
+                    <label class="custom-file-label" for="customFile">Choose ZIP file</label>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="fas fa-upload mr-2"></i>Upload and Analyze
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">How It Works</h5>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <i class="fas fa-upload fa-3x mb-3 text-primary"></i>
+                            <h5>1. Upload Your Data</h5>
+                            <p>Upload your Spotify Extended Streaming History ZIP file</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <i class="fas fa-database fa-3x mb-3 text-primary"></i>
+                            <h5>2. Process Data</h5>
+                            <p>We process your data and store it in a secure database</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card mb-4">
+                        <div class="card-body text-center">
+                            <i class="fas fa-chart-pie fa-3x mb-3 text-primary"></i>
+                            <h5>3. Visualize Insights</h5>
+                            <p>Explore interactive visualizations of your listening habits</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card mt-4">
+        <div class="card-body">
+            <h5 class="card-title">Expected File Structure</h5>
+            <p>Your ZIP file should contain the "Spotify Extended Streaming History" folder with JSON files like:</p>
+            <ul class="text-left">
+                <li>Streaming_History_Audio_2021-2022_0.json</li>
+                <li>Streaming_History_Audio_2022-2023_1.json</li>
+                <li>Streaming_History_Audio_2023_2.json</li>
+                <li>Streaming_History_Audio_2023-2024_3.json</li>
+                <li>Streaming_History_Audio_2024_4.json</li>
+                <li>Streaming_History_Audio_2024-2025_5.json</li>
+                <li>Streaming_History_Video_2023-2024.json</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Update file input label with selected file
+    $('.custom-file-input').on('change', function() {
+        var fileName = $(this).val().split('\\').pop();
+        $(this).next('.custom-file-label').html(fileName);
+    });
+</script>
+{% endblock %}
+
