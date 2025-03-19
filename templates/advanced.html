@@ -1,0 +1,392 @@
+{% extends 'layout.html' %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Advanced Analytics</h1>
+<div class="row">
+    <div class="col-md-3">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Filters</h5>
+            </div>
+            <div class="card-body">
+                <form id="filter-form">
+                    <div class="form-group">
+                        <label for="time-period">Time Period</label>
+                      <select class="form-control" id="time-period">
+                          <option value="all">All Time</option>
+                          <option value="last_year">Last Year</option>
+                          <option value="last_month">Last Month</option>
+                          <option value="custom">Custom Range</option>
+                      </select>
+                  </div>
+                  <div class="form-group date-range-container" style="display: none;">
+                      <label for="date-range">Date Range</label>
+                      <input type="text" class="form-control" id="date-range" placeholder="Select date range">
+                  </div>
+                    
+                    <div class="form-group">
+                        <label for="content-type">Content Type</label>
+                        <select class="form-control" id="content-type">
+                            <option value="all">All Content</option>
+                            <option value="music">Music Only</option>
+                            <option value="podcast">Podcasts Only</option>
+                            <option value="audiobook">Audiobooks Only</option>
+                        </select>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary btn-block">
+                        <i class="fas fa-filter mr-1"></i> Apply Filters
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Listening Patterns</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <canvas id="daily-chart"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <canvas id="hourly-chart"></canvas>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        <canvas id="monthly-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Insights</h5>
+            </div>
+            <div class="card-body">
+                <div id="insights-container">
+                    <p class="text-muted text-center">Apply filters to see insights about your listening patterns.</p>
+                </div>
+                
+                <div class="row mt-4">
+                    <div class="col-md-6">
+                        <div id="top-artists-chart" style="height: 350px;"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="top-tracks-chart" style="height: 350px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script>
+    // Initialize charts
+    let dailyChart, hourlyChart, monthlyChart;
+    
+    function initCharts() {
+        // Daily chart
+        const dailyCtx = document.getElementById('daily-chart').getContext('2d');
+        dailyChart = new Chart(dailyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+                datasets: [{
+                    label: 'Plays by Day of Week',
+                    data: [0, 0, 0, 0, 0, 0, 0],
+                    backgroundColor: '#1DB954',
+                    borderColor: '#191414',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Listening by Day of Week'
+                    }
+                }
+            }
+        });
+        
+        // Hourly chart
+        const hourlyCtx = document.getElementById('hourly-chart').getContext('2d');
+        hourlyChart = new Chart(hourlyCtx, {
+            type: 'line',
+            data: {
+                labels: Array.from({length: 24}, (_, i) => i),
+                datasets: [{
+                    label: 'Plays by Hour of Day',
+                    data: Array(24).fill(0),
+                    backgroundColor: 'rgba(29, 185, 84, 0.2)',
+                    borderColor: '#1DB954',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Listening by Hour of Day'
+                    }
+                }
+            }
+        });
+        
+        // Monthly chart
+        const monthlyCtx = document.getElementById('monthly-chart').getContext('2d');
+        monthlyChart = new Chart(monthlyCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Plays by Month',
+                    data: Array(12).fill(0),
+                    backgroundColor: '#1DB954',
+                    borderColor: '#191414',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Listening by Month'
+                    }
+                }
+            }
+        });
+    }
+    
+    function updateCharts(data) {
+        // Update daily chart
+        dailyChart.data.labels = data.daily.labels;
+        dailyChart.data.datasets[0].data = data.daily.data;
+        dailyChart.update();
+        
+        // Update hourly chart
+        hourlyChart.data.datasets[0].data = data.hourly.data;
+        hourlyChart.update();
+        
+        // Monthly chart
+        monthlyChart.data.labels = data.monthly.labels;
+        monthlyChart.data.datasets[0].data = data.monthly.data;
+        monthlyChart.update();
+        
+        // Generate insights
+        generateInsights(data);
+    }
+    
+    function generateInsights(data) {
+        const insightsContainer = document.getElementById('insights-container');
+        
+        // Find peak listening times
+        const maxHourIndex = data.hourly.data.indexOf(Math.max(...data.hourly.data));
+        const maxDayIndex = data.daily.data.indexOf(Math.max(...data.daily.data));
+        const maxMonthIndex = data.monthly.data.indexOf(Math.max(...data.monthly.data));
+        
+        let insights = `
+            <div class="alert alert-success">
+                <h5><i class="fas fa-lightbulb mr-2"></i>Listening Insights</h5>
+                <ul>
+                    <li>Your peak listening hour is <strong>${maxHourIndex}:00</strong></li>
+                    <li>Your favorite day to listen is <strong>${data.daily.labels[maxDayIndex]}</strong></li>
+                    <li>Your most active month is <strong>${data.monthly.labels[maxMonthIndex]}</strong></li>
+                </ul>
+            </div>
+        `;
+        
+        insightsContainer.innerHTML = insights;
+        
+        // Create Plotly charts for top artists and tracks
+        if (data.topArtists && data.topArtists.length > 0) {
+            const artistNames = data.topArtists.map(a => a.name);
+            const artistCounts = data.topArtists.map(a => a.count);
+            
+            const artistsLayout = {
+                title: 'Top Artists',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(40,40,40,0.8)',
+                font: {
+                    color: '#ffffff'
+                },
+                margin: {
+                    l: 120,
+                    r: 10,
+                    b: 50,
+                    t: 50
+                },
+                xaxis: {
+                    title: 'Plays',
+                    color: '#b3b3b3',
+                    gridcolor: '#333333'
+                },
+                yaxis: {
+                    color: '#b3b3b3',
+                    gridcolor: '#333333'
+                }
+            };
+            
+            const artistsData = [{
+                type: 'bar',
+                x: artistCounts,
+                y: artistNames,
+                orientation: 'h',
+                marker: {
+                    color: '#1DB954'
+                }
+            }];
+            
+            Plotly.newPlot('top-artists-chart', artistsData, artistsLayout, {displayModeBar: false, responsive: true});
+        }
+        
+        if (data.topTracks && data.topTracks.length > 0) {
+            const trackLabels = data.topTracks.map(t => `${t.name} - ${t.artist}`);
+            const trackCounts = data.topTracks.map(t => t.count);
+            
+            const tracksLayout = {
+                title: 'Top Tracks',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                plot_bgcolor: 'rgba(40,40,40,0.8)',
+                font: {
+                    color: '#ffffff'
+                },
+                margin: {
+                    l: 120,
+                    r: 10,
+                    b: 50,
+                    t: 50
+                },
+                xaxis: {
+                    title: 'Plays',
+                    color: '#b3b3b3',
+                    gridcolor: '#333333'
+                },
+                yaxis: {
+                    color: '#b3b3b3',
+                    gridcolor: '#333333'
+                }
+            };
+            
+            const tracksData = [{
+                type: 'bar',
+                x: trackCounts,
+                y: trackLabels,
+                orientation: 'h',
+                marker: {
+                    color: '#1DB954'
+                }
+            }];
+            
+            Plotly.newPlot('top-tracks-chart', tracksData, tracksLayout, {displayModeBar: false, responsive: true});
+        }
+    }
+    
+    // Initialize charts on page load
+    document.addEventListener('DOMContentLoaded', function() {
+    // Get min and max dates from Flask (Jinja)
+    const minDate = "{{ oldest }}"; 
+    const maxDate = "{{ latest }}";
+
+    console.log("Date range limits:", minDate, maxDate);
+
+    // Initialize flatpickr with min/max dates
+    const dateRangePicker = flatpickr('#date-range', {
+        mode: 'range',
+        dateFormat: 'Y-m-d',
+        minDate: minDate, // Set dynamically
+        maxDate: maxDate, // Set dynamically
+        theme: 'dark',
+        animate: true,
+        conjunction: ' to ',
+        defaultHour: 0,
+    });
+
+       // Console logging after flatpickr init
+      console.log(document.querySelector("#date-range")._flatpickr.calendarContainer);
+
+      // Add custom styles for the flatpickr dark theme
+      document.head.insertAdjacentHTML('beforeend', ``);
+      
+      // Show/hide date range picker based on selection
+      document.getElementById('time-period').addEventListener('change', function() {
+        const dateRangeContainers = document.querySelectorAll('.date-range-container');
+        if (this.value === 'custom') {
+            dateRangeContainers.forEach(container => container.style.display = 'block');
+
+            // Add the 'dark' class to the Flatpickr calendar
+            document.querySelector(".flatpickr-calendar").classList.add("dark");
+
+            //console logging after dark class addition
+            console.log(document.querySelector(".flatpickr-calendar"));
+        } else {
+            dateRangeContainers.forEach(container => container.style.display = 'none');
+        }
+    });
+        initCharts();
+        
+        // Handle filter form submission
+        document.getElementById('filter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get the selected values
+            const period = document.getElementById('time-period').value;
+            const contentType = document.getElementById('content-type').value;
+            
+            // Prepare the fetch URL
+            let fetchUrl = `/api/listening-patterns?period=${period}&content=${contentType}`;
+            
+            // Add date range parameters if custom period is selected
+            if (period === 'custom') {
+                const dateRange = document.getElementById('date-range').value;
+                
+                if (!dateRange) {
+                    alert('Please select a date range for custom period');
+                    return;
+                }
+                
+                const [startDate, endDate] = dateRange.split(' to ');
+                fetchUrl += `&start_date=${startDate}&end_date=${endDate || startDate}`;
+            }
+            
+            // Fetch filtered data
+            fetch(fetchUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        updateCharts(data);
+                    } else {
+                        alert(data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    alert('An error occurred while fetching data.');
+                });
+        });
+        
+        // Trigger initial load with default filters
+        document.getElementById('filter-form').dispatchEvent(new Event('submit'));
+    });
+</script>
+{% endblock %}
+

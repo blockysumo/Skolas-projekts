@@ -1,0 +1,292 @@
+/* Spotify-inspired theme */
+:root {
+  --spotify-green: #1db954;
+  --spotify-black: #191414;
+  --spotify-dark-gray: #282828;
+  --spotify-light-gray: #b3b3b3;
+  --spotify-white: #ffffff;
+}
+
+body {
+  font-family: "Circular", "Helvetica Neue", Arial, sans-serif;
+  background-color: #121212;
+  color: var(--spotify-white);
+}
+
+.navbar {
+  background-color: var(--spotify-black);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-brand {
+  color: var(--spotify-green) !important;
+  font-weight: bold;
+}
+
+.jumbotron {
+  background-color: var(--spotify-dark-gray);
+  color: var(--spotify-white);
+  border-radius: 8px;
+}
+
+.card {
+  background-color: var(--spotify-dark-gray);
+  border: none;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.card-title {
+  color: var(--spotify-white);
+}
+
+.btn-primary {
+  background-color: var(--spotify-green);
+  border-color: var(--spotify-green);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #1ed760;
+  border-color: #1ed760;
+}
+
+.table {
+  color: var(--spotify-white);
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Fix for table hover effect - make it more transparent */
+.table-hover tbody tr:hover {
+  background-color: rgba(29, 185, 84, 0.2) !important;
+  color: var(--spotify-white) !important;
+}
+
+.thead-dark th {
+  background-color: var(--spotify-black) !important;
+  border-color: #333 !important;
+}
+
+/* Pagination styling fixes */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pagination {
+  margin-bottom: 0;
+}
+
+.pagination .page-link {
+  background-color: var(--spotify-dark-gray);
+  border-color: #333;
+  color: var(--spotify-white);
+}
+
+.pagination .page-link:hover {
+  background-color: var(--spotify-green);
+  color: var(--spotify-white);
+}
+
+.pagination .page-item.active .page-link {
+  background-color: var(--spotify-green);
+  border-color: var(--spotify-green);
+}
+
+/* Fix for pagination ellipsis and other controls */
+.pagination .page-item.disabled .page-link {
+  background-color: rgba(40, 40, 40, 0.8);
+  color: var(--spotify-light-gray);
+  border-color: #333;
+}
+
+.form-control {
+  background-color: #333;
+  border-color: #444;
+  color: var(--spotify-white);
+}
+
+.form-control:focus {
+  background-color: #444;
+  border-color: var(--spotify-green);
+  color: var(--spotify-white);
+  box-shadow: 0 0 0 0.2rem rgba(29, 185, 84, 0.25);
+}
+
+.custom-file-label {
+  background-color: #333;
+  border-color: #444;
+  color: var(--spotify-light-gray);
+}
+
+.custom-file-label::after {
+  background-color: var(--spotify-green);
+  color: var(--spotify-white);
+}
+
+.footer {
+  background-color: var(--spotify-black);
+  color: var(--spotify-light-gray);
+  padding: 20px 0;
+  margin-top: 40px;
+}
+
+/* Chart customization */
+canvas {
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .display-4 {
+    font-size: 2.5rem;
+  }
+}
+
+/* hello */
+/* Reset some Flatpickr defaults */
+.flatpickr-calendar.dark .flatpickr-days,
+.flatpickr-calendar.dark .flatpickr-day {
+    border-color: transparent;
+    border-radius: 0;
+    padding: 0;
+    margin: 0;
+}
+
+/* Main calendar styling */
+.flatpickr-calendar.dark {
+    background: #121212;
+    color: #fff;
+    box-shadow: 0 3px 13px rgba(0, 0, 0, 0.5);
+    border: 1px solid #333;
+}
+
+/* Month and weekday header */
+.flatpickr-calendar.dark .flatpickr-months,
+.flatpickr-calendar.dark .flatpickr-weekdays,
+.flatpickr-calendar.dark .flatpickr-weekwrapper {
+    background: #121212;
+    color: #fff;
+}
+
+.flatpickr-calendar.dark .flatpickr-weekday {
+    color: #1DB954;
+    font-weight: bold;
+}
+
+/* Day cells */
+.flatpickr-calendar.dark .flatpickr-day {
+  color: #ddd;
+  margin: 2px; /* Add a slight margin */
+}
+
+.flatpickr-calendar.dark .flatpickr-day.selected,
+.flatpickr-calendar.dark .flatpickr-day.startRange,
+.flatpickr-calendar.dark .flatpickr-day.endRange {
+    background: #1DB954;
+    color: #fff;
+    font-weight: bold;
+}
+
+.flatpickr-calendar.dark .flatpickr-day.inRange {
+    color: #14331F;
+}
+
+.flatpickr-calendar.dark .flatpickr-day.disabled {
+    color: #14331F;
+}
+
+/* Time picker */
+.flatpickr-calendar.dark .flatpickr-time {
+    border-top: 1px solid #333;
+}
+
+.flatpickr-calendar.dark .flatpickr-time .numInputWrapper input,
+.flatpickr-calendar.dark .flatpickr-time .flatpickr-am-pm {
+    color: #fff;
+    background: #121212;
+}
+
+/* Navigation buttons */
+.flatpickr-calendar.dark .flatpickr-months .flatpickr-prev-month,
+.flatpickr-calendar.dark .flatpickr-months .flatpickr-next-month {
+    color: #ddd;
+    fill: #ddd;
+    padding: 5px;
+}
+
+.flatpickr-calendar.dark .flatpickr-months .flatpickr-prev-month:hover,
+.flatpickr-calendar.dark .flatpickr-months .flatpickr-next-month:hover {
+    color: #1DB954;
+    fill: #1DB954;
+}
+
+/* Current month display */
+.flatpickr-calendar.dark .flatpickr-current-month {
+    padding: 10px 0;
+}
+
+.flatpickr-calendar.dark .flatpickr-current-month .flatpickr-monthDropdown-months,
+.flatpickr-calendar.dark .flatpickr-current-month input.cur-year {
+    background: #121212;
+    color: #fff;
+    font-weight: bold;
+}
+
+.flatpickr-calendar.dark .flatpickr-current-month .flatpickr-monthDropdown-months:hover,
+.flatpickr-calendar.dark .flatpickr-current-month input.cur-year:hover {
+    background: #333;
+}
+
+/* Today's date */
+.flatpickr-calendar.dark .flatpickr-day.today {
+    border-color: #1DB954;
+    color: #1DB954;
+    font-weight: bold;
+}
+
+.flatpickr-calendar.dark .flatpickr-day.today:hover {
+    background: #1DB954;
+    color: #fff;
+}
+
+/* Input field styling */
+#date-range {
+    background-color: #333;
+    color: #fff;
+    border-color: #444;
+}
+
+#date-range::placeholder {
+    color: #aaa;
+}
+
+#date-range:focus {
+    border-color: #1DB954;
+    box-shadow: 0 0 0 0.2rem rgba(29, 185, 84, 0.25);
+}
+
+/* Range border collapse */
+.flatpickr-calendar.dark .flatpickr-days {
+    border-collapse: collapse;
+}
+
+/* Range cell border removal */
+.flatpickr-calendar.dark .flatpickr-day.inRange + .flatpickr-day.inRange,
+.flatpickr-calendar.dark .flatpickr-day.inRange + .flatpickr-day:not(.inRange),
+.flatpickr-calendar.dark .flatpickr-day:not(.inRange) + .flatpickr-day.inRange {
+    border-left-color: transparent;
+    border-right-color: transparent;
+}
