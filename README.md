@@ -43,17 +43,13 @@ A Flask-based web application that analyzes Spotify Extended Streaming History. 
      ```
 3. **Install requirements:** (Run in **Terminal/Command Prompt** inside the activated virtual environment)
    ```sh
-   pip install -r Skolas-projekts\requirements.txt
+   pip install -r requirements.txt
    ```
-4. **Create necessary directories:** (Run in **Terminal/Command Prompt** inside `Skolas-projekts` directory)
-   ```sh
-   mkdir -p uploads static/images
-   ```
-5. **Run the application:** (Run in **Terminal/Command Prompt** inside `Skolas-projekts` directory)
+4. **Run the application:** (Run in **Terminal/Command Prompt** inside `Skolas-projekts` directory)
    ```sh
    python app.py
    ```
-6. **Access the application** by opening your browser and visiting:
+5. **Access the application** by opening your browser and visiting:
    ```
    http://localhost:5000
    ```
