@@ -87,7 +87,7 @@ A Flask-based web application that analyzes Spotify Extended Streaming History. 
 Skolas-projekts/
 │── app.py             # Main application
 │── requirements.txt   # Dependencies
-│── static/            # CSS/JS/images
+│── static/            # CSS/images
 │── templates/         # HTML files
 │── uploads/           # Temporary files
 │── spotify_data.db    # Database (created after upload)
