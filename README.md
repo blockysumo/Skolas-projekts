@@ -1,128 +1,123 @@
 # Spotify Listening History Analyzer
 
-A Flask-based web application that analyzes your Spotify listening history and provides insightful visualizations and statistics. Upload your Spotify data export (ZIP file) and explore your listening habits through interactive charts and metrics.
+A Flask-based web application that analyzes Spotify Extended Streaming History. Visualizes listening habits, shows top artists/tracks, and provides detailed statistics through dashboards.
+
 
 ![vivaldi_hYawsGebIf](https://github.com/user-attachments/assets/4cdddf66-be5c-43f0-83aa-0f0b5e453588)
-
----
 
 
 ## Features
 
-- **Comprehensive Analysis**:
-  - Total listening time and track count
-  - Hourly and weekly listening patterns
-  - Top artists and tracks
-  - Track skip rates and duration preferences
-
-- **Interactive Visualizations**:
-  - Yearly listening trends
-  - Daily listening rhythm
-  - Weekly listening heatmap
-  - Track length distribution
-  - Most skipped tracks
-  - Artist loyalty pie chart
-  - Top artist listening timeline
-
-- **Data Export**:
-  - Download all visualizations and raw data as a ZIP file
-
-- **User-Friendly Interface**:
-  - Responsive design powered by Bootstrap
-  - Sortable track statistics table
-  - Clear error messages and feedback
-
----
+- **Upload Spotify Extended History ZIP**
+- **Interactive dashboards with visualizations:**
+  - Listening heatmap (day/hour)
+  - Top artists/tracks charts
+  - Monthly trends
+  - Content type distribution
+  - Skip rate analysis
+- **Paginated lists of all artists/tracks**
+- **Advanced filtering through API**
+- **Data export (CSV + PNGs)**
 
 ## Getting Started
 
 ### Prerequisites
 
 - Python 3.8+
-- pip (Python package manager)
+- pip package manager
 
 ### Installation
 
-1. Clone the repository:
-   ```bash
+1. **Clone repository:**
+   ```sh
    git clone https://github.com/blockysumo/Skolas-projekts.git
-   cd Skolas-projekts/spotify2.1
+   cd Skolas-projekts
+   ```
+2. **Create virtual environment:**
+   ```sh
+   python -m venv venv
+   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   ```
+3. **Install requirements:**
+   ```sh
+   pip install -r requirements.txt
+   ```
+4. **Create directories:**
+   ```sh
+   mkdir -p uploads static/images
+   ```
+5. **Run application:**
+   ```sh
+   python app.py
+   ```
+6. **Visit** `http://localhost:5000` in your browser.
 
-2. Create a virtual environment:
+## How to Get Spotify Data
 
-```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-3. Install dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-4. Set up environment variables:
-Create a `.env` file in the root directory and add your secret key:
-```py
-SECRET_KEY=your-secret-key-here
-```
-
----
-
-## Running the Application
-1. Start the Flask development server:
-
-```bash
-python app.py
-```
-2. Open your browser and navigate to:
-http://localhost:5000
-
-3. Upload your Spotify data export (ZIP file) and explore your listening history!
-
----
+1. Go to [Spotify Privacy Settings](https://www.spotify.com/account/privacy/)
+2. Scroll to **"Download your data"**
+3. Check **Extended streaming history**
+4. Click **"Request data"**
+5. Wait for email (up to 30 days)
+6. Download ZIP when ready
 
 ## How to Use
-**1. Export Your Spotify Data:**
 
-  - Go to [Spotify's Privacy Settings](https://www.spotify.com/account/privacy/).
-  
-  - Request your extended streaming history (this may take a few days).
-  
-  - Download the ZIP file when ready.
+### Upload Data:
+- Choose Spotify ZIP file
+- Wait for processing (10-60 seconds)
 
-  **2. Upload and Analyze:**
+### Dashboard:
+- View total listening time, unique tracks/artists
+- Explore charts and visualizations
 
-  - Visit the application homepage.
-  
-  - Upload the downloaded ZIP file.
-  
-  - Click "Continue" to process the data.
-  
-  - Explore the generated visualizations and metrics.
+### Artists & Tracks:
+- Search history
+- Sort by plays/duration/skip rate
+- Use pagination
 
-  **3. Export Your Results:**
+### Advanced Features:
+- Filter by date/content type
+- Access API for custom analysis
+- Export full dataset
 
-  - Click the "Export Full Data Package" button to download all charts and raw data as a ZIP file.
+## Project Structure
 
----
+```
+Skolas-projekts/
+│── app.py             # Main application
+│── requirements.txt   # Dependencies
+│── static/            # CSS/JS/images
+│── templates/         # HTML files
+│── uploads/           # Temporary files
+│── spotify_data.db    # Database (created after upload)
+```
 
 ## Built With
-- **Flask** - Web framework
 
-- **SQLite** - Database for storing streaming history
+- **Frontend:** HTML/CSS, Bootstrap, Plotly.js
+- **Backend:** Flask (Python)
+- **Database:** SQLite
+- **Data Processing:** Pandas, NumPy
+- **Visualization:** Matplotlib, Seaborn, Plotly
+- **Utilities:** Flask-Paginate
 
-- **Pandas** - Data processing and analysis
+## Requirements
 
-- **Matplotlib** - Data visualization
-
-- **Bootstrap** - Front-end styling
-
-- **Jinja2** - Templating engine
-
----
+```txt
+Flask==3.0.0
+pandas==2.1.3
+numpy==1.26.2
+matplotlib==3.8.0
+seaborn==0.13.0
+plotly==5.18.0
+flask-paginate==2022.1.8
+python-dotenv==1.0.0
+```
 
 ## Acknowledgments
-- Spotify for providing the data export feature.
 
-- The Flask and Python communities for their amazing tools and libraries.
+Developed as part of **Datorium coding school (Latvia)**. Initial code generated using v0.dev AI assistant, with manual improvements for production readiness. Thanks to **Datorium mentors** for project structure guidance.
 
-- **You**, for being curious about your listening habits! 🎧
+- **GitHub:** [https://github.com/blockysumo/Skolas-projekts](https://github.com/blockysumo/Skolas-projekts)
+- **Report Issues:** [https://github.com/blockysumo/Skolas-projekts/issues](https://github.com/blockysumo/Skolas-projekts/issues)
