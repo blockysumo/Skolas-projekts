@@ -24,29 +24,39 @@ A Flask-based web application that analyzes Spotify Extended Streaming History. 
 
 ### Installation
 
-1. **Clone repository:**
+1. **Clone repository:** (Run these commands in **Terminal/Command Prompt** in a directory where you want to store the project files, e.g., `Documents/Projects/`)
    ```sh
    git clone https://github.com/blockysumo/Skolas-projekts.git
    cd Skolas-projekts
    ```
-2. **Create virtual environment:**
+2. **Create virtual environment:** (Run in **Terminal/Command Prompt** inside the `Skolas-projekts` directory)
    ```sh
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
    ```
-3. **Install requirements:**
+   - **On macOS/Linux:** (Run in **Terminal** inside `Skolas-projekts` directory)
+     ```sh
+     source venv/bin/activate
+     ```
+   - **On Windows:** (Run in **Command Prompt (cmd.exe)** inside `Skolas-projekts` directory)
+     ```sh
+     venv\Scripts\activate
+     ```
+3. **Install requirements:** (Run in **Terminal/Command Prompt** inside the activated virtual environment)
    ```sh
    pip install -r requirements.txt
    ```
-4. **Create directories:**
+4. **Create necessary directories:** (Run in **Terminal/Command Prompt** inside `Skolas-projekts` directory)
    ```sh
    mkdir -p uploads static/images
    ```
-5. **Run application:**
+5. **Run the application:** (Run in **Terminal/Command Prompt** inside `Skolas-projekts` directory)
    ```sh
    python app.py
    ```
-6. **Visit** `http://localhost:5000` in your browser.
+6. **Access the application** by opening your browser and visiting:
+   ```
+   http://localhost:5000
+   ```
 
 ## How to Get Spotify Data
 
