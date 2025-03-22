@@ -159,31 +159,31 @@ canvas {
 /* Reset some Flatpickr defaults */
 .flatpickr-calendar.dark .flatpickr-days,
 .flatpickr-calendar.dark .flatpickr-day {
-    border-color: transparent;
-    border-radius: 0;
-    padding: 0;
-    margin: 0;
+  border-color: transparent;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
 }
 
 /* Main calendar styling */
 .flatpickr-calendar.dark {
-    background: #121212;
-    color: #fff;
-    box-shadow: 0 3px 13px rgba(0, 0, 0, 0.5);
-    border: 1px solid #333;
+  background: #121212;
+  color: #fff;
+  box-shadow: 0 3px 13px rgba(0, 0, 0, 0.5);
+  border: 1px solid #333;
 }
 
 /* Month and weekday header */
 .flatpickr-calendar.dark .flatpickr-months,
 .flatpickr-calendar.dark .flatpickr-weekdays,
 .flatpickr-calendar.dark .flatpickr-weekwrapper {
-    background: #121212;
-    color: #fff;
+  background: #121212;
+  color: #fff;
 }
 
 .flatpickr-calendar.dark .flatpickr-weekday {
-    color: #1DB954;
-    font-weight: bold;
+  color: #1db954;
+  font-weight: bold;
 }
 
 /* Day cells */
@@ -195,98 +195,298 @@ canvas {
 .flatpickr-calendar.dark .flatpickr-day.selected,
 .flatpickr-calendar.dark .flatpickr-day.startRange,
 .flatpickr-calendar.dark .flatpickr-day.endRange {
-    background: #1DB954;
-    color: #fff;
-    font-weight: bold;
+  background: #1db954;
+  color: #fff;
+  font-weight: bold;
 }
 
 .flatpickr-calendar.dark .flatpickr-day.inRange {
-    color: #14331F;
+  color: #14331f;
 }
 
 .flatpickr-calendar.dark .flatpickr-day.disabled {
-    color: #14331F;
+  color: #14331f;
 }
 
 /* Time picker */
 .flatpickr-calendar.dark .flatpickr-time {
-    border-top: 1px solid #333;
+  border-top: 1px solid #333;
 }
 
 .flatpickr-calendar.dark .flatpickr-time .numInputWrapper input,
 .flatpickr-calendar.dark .flatpickr-time .flatpickr-am-pm {
-    color: #fff;
-    background: #121212;
+  color: #fff;
+  background: #121212;
 }
 
 /* Navigation buttons */
 .flatpickr-calendar.dark .flatpickr-months .flatpickr-prev-month,
 .flatpickr-calendar.dark .flatpickr-months .flatpickr-next-month {
-    color: #ddd;
-    fill: #ddd;
-    padding: 5px;
+  color: #ddd;
+  fill: #ddd;
+  padding: 5px;
 }
 
 .flatpickr-calendar.dark .flatpickr-months .flatpickr-prev-month:hover,
 .flatpickr-calendar.dark .flatpickr-months .flatpickr-next-month:hover {
-    color: #1DB954;
-    fill: #1DB954;
+  color: #1db954;
+  fill: #1db954;
 }
 
 /* Current month display */
 .flatpickr-calendar.dark .flatpickr-current-month {
-    padding: 10px 0;
+  padding: 10px 0;
 }
 
 .flatpickr-calendar.dark .flatpickr-current-month .flatpickr-monthDropdown-months,
 .flatpickr-calendar.dark .flatpickr-current-month input.cur-year {
-    background: #121212;
-    color: #fff;
-    font-weight: bold;
+  background: #121212;
+  color: #fff;
+  font-weight: bold;
 }
 
 .flatpickr-calendar.dark .flatpickr-current-month .flatpickr-monthDropdown-months:hover,
 .flatpickr-calendar.dark .flatpickr-current-month input.cur-year:hover {
-    background: #333;
+  background: #333;
 }
 
 /* Today's date */
 .flatpickr-calendar.dark .flatpickr-day.today {
-    border-color: #1DB954;
-    color: #1DB954;
-    font-weight: bold;
+  border-color: #1db954;
+  color: #1db954;
+  font-weight: bold;
 }
 
 .flatpickr-calendar.dark .flatpickr-day.today:hover {
-    background: #1DB954;
-    color: #fff;
+  background: #1db954;
+  color: #fff;
 }
 
 /* Input field styling */
 #date-range {
-    background-color: #333;
-    color: #fff;
-    border-color: #444;
+  background-color: #333;
+  color: #fff;
+  border-color: #444;
 }
 
 #date-range::placeholder {
-    color: #aaa;
+  color: #aaa;
 }
 
 #date-range:focus {
-    border-color: #1DB954;
-    box-shadow: 0 0 0 0.2rem rgba(29, 185, 84, 0.25);
+  border-color: #1db954;
+  box-shadow: 0 0 0 0.2rem rgba(29, 185, 84, 0.25);
 }
 
 /* Range border collapse */
 .flatpickr-calendar.dark .flatpickr-days {
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 /* Range cell border removal */
 .flatpickr-calendar.dark .flatpickr-day.inRange + .flatpickr-day.inRange,
 .flatpickr-calendar.dark .flatpickr-day.inRange + .flatpickr-day:not(.inRange),
 .flatpickr-calendar.dark .flatpickr-day:not(.inRange) + .flatpickr-day.inRange {
-    border-left-color: transparent;
-    border-right-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
 }
+
+/* Loading animation */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(18, 18, 18, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+.spinner-container {
+  text-align: center;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  margin: 0 auto 20px;
+  border: 5px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--spotify-green);
+  animation: spin 1s ease-in-out infinite;
+}
+
+.loading-text {
+  color: var(--spotify-white);
+  font-size: 18px;
+  margin-top: 15px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Artist and track links */
+.artist-link,
+.track-link {
+  color: var(--spotify-white) !important;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.artist-link:hover,
+.track-link:hover {
+  color: var(--spotify-light-gray) !important;
+  text-decoration: underline;
+}
+
+/* Stats in detail pages */
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.stat-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.stat-label {
+  color: var(--spotify-light-gray);
+}
+
+.stat-value {
+  font-weight: bold;
+  color: var(--spotify-white);
+}
+
+/* Make sure Plotly charts are visible */
+.js-plotly-plot {
+  width: 100%;
+}
+
+.js-plotly-plot .plotly .main-svg {
+  background: transparent !important;
+}
+
+.js-plotly-plot .plotly .modebar {
+  background: rgba(40, 40, 40, 0.7) !important;
+}
+
+.js-plotly-plot .plotly .modebar-btn path {
+  fill: var(--spotify-light-gray) !important;
+}
+
+.js-plotly-plot .plotly .modebar-btn:hover path {
+  fill: var(--spotify-green) !important;
+}
+
+/* Ensure tooltips are readable */
+.js-plotly-plot .plotly .hovertext {
+  background-color: rgba(25, 20, 20, 0.9) !important;
+  color: white !important;
+  border: 1px solid var(--spotify-green) !important;
+}
+
+/* Fix for table striping in artist_detail.html */
+.table-striped tbody tr:nth-of-type(odd) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.table-striped tbody tr:nth-of-type(even) {
+  background-color: transparent;
+}
+
+/* Ensure track links are white in all pages */
+.table a,
+.table a:visited,
+.table a:active {
+  color: var(--spotify-white) !important;
+}
+
+.table a:hover {
+  color: var(--spotify-light-gray) !important;
+}
+
+/* Pattern buttons styling */
+.pattern-btn {
+  font-size: 0.8rem;
+  padding: 0.25rem 0.5rem;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.pattern-btn.active {
+  background-color: var(--spotify-green);
+  border-color: var(--spotify-green);
+  color: var(--spotify-white);
+}
+
+.pattern-btn:hover:not(.active) {
+  background-color: rgba(29, 185, 84, 0.2);
+  border-color: var(--spotify-green);
+}
+
+.card-header .btn-group {
+  margin-left: auto;
+}
+
+/* Make sure charts resize properly */
+.pattern-chart {
+  width: 100%;
+  transition: opacity 0.3s ease;
+}
+
+/* Add these styles at the end of the file */
+
+/* Equal height rows */
+.equal-height-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.equal-height-row > [class*="col-"] {
+  display: flex;
+  flex-direction: column;
+}
+
+.equal-height-row .card {
+  flex: 1;
+}
+
+/* Ensure chart containers maintain proper height */
+.card-body {
+  display: flex;
+  flex-direction: column;
+}
+
+.pattern-chart {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.pattern-chart > div {
+  flex: 1;
+}
+
+/* Adjust button group in pattern cards */
+.card-header .btn-group {
+  margin-left: auto;
+}
+
+/* Make sure charts resize properly */
+.js-plotly-plot {
+  width: 100%;
+  height: 100%;
+}
+
