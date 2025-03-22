@@ -92,8 +92,16 @@
         <tbody>
             {% for track in tracks %}
             <tr>
-                <td>{{ track.track_name }}</td>
-                <td>{{ track.artist_name }}</td>
+                <td>
+                    <a href="{{ url_for('track_detail', track_name=track.track_name, artist_name=track.artist_name) }}" class="track-link">
+                        {{ track.track_name }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{{ url_for('artist_detail', artist_name=track.artist_name) }}" class="artist-link">
+                        {{ track.artist_name }}
+                    </a>
+                </td>
                 <td>{{ track.plays }}</td>
                 <td>{{ track.total_time_formatted }}</td>
                 <td>{{ track.skip_rate }}%</td>
