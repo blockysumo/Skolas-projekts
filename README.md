@@ -86,20 +86,7 @@ A Flask-based web application that analyzes Spotify Extended Streaming History. 
 ### Upload Data:
 - Choose Spotify ZIP file
 - Wait for processing (10-60 seconds)
-
-### Dashboard:
-- View total listening time, unique tracks/artists
 - Explore charts and visualizations
-
-### Artists & Tracks:
-- Search history
-- Sort by plays/duration/skip rate
-- Use pagination
-
-### Advanced Features:
-- Filter by date/content type
-- Access API for custom analysis
-- Export full dataset
 
 ## Project Structure
 
