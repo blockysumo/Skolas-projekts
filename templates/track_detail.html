@@ -1,0 +1,470 @@
+{% extends 'layout.html' %}
+
+{% block extra_head %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div id="loading-overlay" class="loading-overlay">
+  <div class="spinner-container">
+      <div class="spinner"></div>
+      <p class="loading-text">Analyzing track data...</p>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1>{{ track_name }}</h1>
+        <h4>by <a href="{{ url_for('artist_detail', artist_name=artist_name) }}" class="artist-link">{{ artist_name }}</a></h4>
+    </div>
+    <a href="{{ url_for('tracks') }}" class="btn btn-outline-light">
+        <i class="fas fa-arrow-left mr-2"></i>Back to Tracks
+    </a>
+</div>
+
+<div class="row equal-height-row">
+  <div class="col-md-4">
+      <div class="card mb-4 h-100">
+          <div class="card-header">
+              <h5 class="card-title mb-0">Track Stats</h5>
+          </div>
+          <div class="card-body d-flex flex-column justify-content-between">
+              <div class="stat-item">
+                  <span class="stat-label">Total Plays</span>
+                  <span class="stat-value">{{ stats.plays }}</span>
+              </div>
+              <div class="stat-item">
+                  <span class="stat-label">Total Listening Time</span>
+                  <span class="stat-value">{{ stats.total_time_formatted }}</span>
+              </div>
+              <div class="stat-item">
+                  <span class="stat-label">Skip Rate</span>
+                  <span class="stat-value">{{ stats.skip_rate }}%</span>
+              </div>
+              <div class="stat-item">
+                  <span class="stat-label">Average Duration</span>
+                  <span class="stat-value">{{ stats.avg_duration }}</span>
+              </div>
+              <div class="stat-item">
+                  <span class="stat-label">First Listened</span>
+                  <span class="stat-value">{{ stats.first_listened }}</span>
+              </div>
+              <div class="stat-item">
+                  <span class="stat-label">Last Listened</span>
+                  <span class="stat-value">{{ stats.last_listened }}</span>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="col-md-8">
+      <div class="card mb-4 h-100">
+          <div class="card-header">
+              <h5 class="card-title mb-0">Listening History</h5>
+          </div>
+          <div class="card-body">
+              <div id="listening-history-chart" style="height: 300px;"></div>
+          </div>
+      </div>
+  </div>
+</div>
+
+<div class="row equal-height-row">
+  <div class="col-md-6">
+    <div class="card mb-4 h-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Listening Patterns</h5>
+      </div>
+      <div class="card-body">
+        <div class="btn-group mb-3 w-100" role="group" aria-label="Listening pattern views">
+          <button type="button" class="btn btn-sm btn-outline-light pattern-btn active" data-pattern="daily">Daily</button>
+          <button type="button" class="btn btn-sm btn-outline-light pattern-btn" data-pattern="hourly">Hourly</button>
+          <button type="button" class="btn btn-sm btn-outline-light pattern-btn" data-pattern="monthly">Monthly</button>
+        </div>
+        <div id="pattern-daily" class="pattern-chart">
+          <div id="day-distribution-chart" style="height: 250px;"></div>
+          <p class="text-muted text-center mt-2">Listening activity by day of the week</p>
+        </div>
+        <div id="pattern-hourly" class="pattern-chart" style="display: none;">
+          <div id="time-distribution-chart" style="height: 250px;"></div>
+          <p class="text-muted text-center mt-2">Listening activity by hour of the day</p>
+        </div>
+        <div id="pattern-monthly" class="pattern-chart" style="display: none;">
+          <div id="monthly-distribution-chart" style="height: 250px;"></div>
+          <p class="text-muted text-center mt-2">Listening activity by month of the year</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card mb-4 h-100">
+      <div class="card-header">
+        <h5 class="card-title mb-0">Skip Rate Analysis</h5>
+      </div>
+      <div class="card-body">
+        <div id="skip-rate-chart" style="height: 300px;"></div>
+        <p class="text-muted text-center mt-2">Skip rate compared to average</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header">
+      <h5 class="card-title mb-0">Listening Sessions</h5>
+  </div>
+  <div class="card-body">
+      <div class="row">
+          <div class="col-md-6">
+              <form method="GET" action="{{ url_for('track_detail', track_name=track_name, artist_name=artist_name) }}" class="form-inline">
+                  <div class="input-group mb-2 mr-sm-2">
+                      <input type="text" class="form-control" name="search" placeholder="Search sessions..." value="{{ search }}">
+                      <div class="input-group-append">
+                          <button class="btn btn-primary" type="submit">
+                              <i class="fas fa-search"></i>
+                          </button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+          <div class="col-md-6 text-right">
+              <div class="form-inline justify-content-end">
+                  <label class="mr-2">Show:</label>
+                  <select class="form-control mr-2" id="per-page-select">
+                      <option value="10" {% if per_page == 10 %}selected{% endif %}>10</option>
+                      <option value="25" {% if per_page == 25 %}selected{% endif %}>25</option>
+                      <option value="50" {% if per_page == 50 %}selected{% endif %}>50</option>
+                      <option value="100" {% if per_page == 100 %}selected{% endif %}>100</option>
+                  </select>
+              </div>
+          </div>
+      </div>
+      
+      <div class="table-responsive">
+          <table class="table table-striped table-hover">
+              <thead class="thead-dark">
+                  <tr>
+                      <th>
+                          <a href="{{ url_for('track_detail', track_name=track_name, artist_name=artist_name, search=search, sort='timestamp', order='asc' if sort == 'timestamp' and order == 'desc' else 'desc', per_page=per_page) }}" class="text-white">
+                              Date & Time
+                              {% if sort == 'timestamp' or not sort %}
+                                  <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                              {% else %}
+                                  <i class="fas fa-sort"></i>
+                              {% endif %}
+                          </a>
+                      </th>
+                      <th>
+                          <a href="{{ url_for('track_detail', track_name=track_name, artist_name=artist_name, search=search, sort='duration', order='asc' if sort == 'duration' and order == 'desc' else 'desc', per_page=per_page) }}" class="text-white">
+                              Duration
+                              {% if sort == 'duration' %}
+                                  <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                              {% else %}
+                                  <i class="fas fa-sort"></i>
+                              {% endif %}
+                          </a>
+                      </th>
+                      <th>
+                          <a href="{{ url_for('track_detail', track_name=track_name, artist_name=artist_name, search=search, sort='platform', order='asc' if sort == 'platform' and order == 'desc' else 'desc', per_page=per_page) }}" class="text-white">
+                              Platform
+                              {% if sort == 'platform' %}
+                                  <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                              {% else %}
+                                  <i class="fas fa-sort"></i>
+                              {% endif %}
+                          </a>
+                      </th>
+                      <th>
+                          <a href="{{ url_for('track_detail', track_name=track_name, artist_name=artist_name, search=search, sort='skipped', order='asc' if sort == 'skipped' and order == 'desc' else 'desc', per_page=per_page) }}" class="text-white">
+                              Skipped
+                              {% if sort == 'skipped' %}
+                                  <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                              {% else %}
+                                  <i class="fas fa-sort"></i>
+                              {% endif %}
+                          </a>
+                      </th>
+                      <th>
+                          <a href="{{ url_for('track_detail', track_name=track_name, artist_name=artist_name, search=search, sort='shuffle', order='asc' if sort == 'shuffle' and order == 'desc' else 'desc', per_page=per_page) }}" class="text-white">
+                              Shuffle
+                              {% if sort == 'shuffle' %}
+                                  <i class="fas fa-sort-{{ 'up' if order == 'asc' else 'down' }}"></i>
+                              {% else %}
+                                  <i class="fas fa-sort"></i>
+                              {% endif %}
+                          </a>
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for session in sessions %}
+                  <tr>
+                      <td>{{ session.timestamp }}</td>
+                      <td>{{ session.duration }}</td>
+                      <td>{{ session.platform }}</td>
+                      <td>{% if session.skipped %}<i class="fas fa-check text-success"></i>{% else %}<i class="fas fa-times text-danger"></i>{% endif %}</td>
+                      <td>{% if session.shuffle %}<i class="fas fa-check text-primary"></i>{% else %}<i class="fas fa-times"></i>{% endif %}</td>
+                  </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+      
+      {% if not sessions %}
+      <div class="alert alert-info">
+          No sessions found matching your search criteria.
+      </div>
+      {% endif %}
+      
+      <div class="pagination-container">
+          {{ pagination.links | safe }}
+      </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Parse the JSON data passed from Flask
+    const historyData = {{ history_data | tojson }};
+    const timeDistributionData = {{ time_distribution | tojson }};
+    const dayDistributionData = {{ day_distribution | tojson }};
+    
+    // Create listening history chart
+    const historyChartData = [{
+        x: historyData.dates,
+        y: historyData.counts,
+        type: 'scatter',
+        mode: 'lines+markers',
+        marker: {
+            color: '#1DB954',
+            size: 8
+        },
+        line: {
+            color: '#1DB954',
+            width: 3
+        }
+    }];
+    
+    const historyLayout = {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(40,40,40,0.8)',
+        font: {
+            color: '#ffffff'
+        },
+        margin: {
+            l: 50,
+            r: 20,
+            b: 50,
+            t: 20
+        },
+        xaxis: {
+            title: 'Date',
+            color: '#b3b3b3',
+            gridcolor: '#333333'
+        },
+        yaxis: {
+            title: 'Plays',
+            color: '#b3b3b3',
+            gridcolor: '#333333'
+        }
+    };
+    
+    Plotly.newPlot('listening-history-chart', historyChartData, historyLayout, {displayModeBar: false, responsive: true});
+    
+    // Create time distribution chart (by hour of day)
+    const timeDistributionChartData = [{
+        x: timeDistributionData.hours,
+        y: timeDistributionData.counts,
+        type: 'bar',
+        marker: {
+            color: '#1DB954'
+        }
+    }];
+    
+    const timeDistributionLayout = {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(40,40,40,0.8)',
+        font: {
+            color: '#ffffff'
+        },
+        margin: {
+            l: 50,
+            r: 20,
+            b: 50,
+            t: 20
+        },
+        xaxis: {
+            title: 'Hour of Day',
+            color: '#b3b3b3',
+            gridcolor: '#333333',
+            tickvals: [...Array(24).keys()]
+        },
+        yaxis: {
+            title: 'Plays',
+            color: '#b3b3b3',
+            gridcolor: '#333333'
+        }
+    };
+    
+    Plotly.newPlot('time-distribution-chart', timeDistributionChartData, timeDistributionLayout, {displayModeBar: false, responsive: true});
+    
+    // Create day of week distribution chart
+    const dayDistributionChartData = [{
+        x: dayDistributionData.days,
+        y: dayDistributionData.counts,
+        type: 'bar',
+        marker: {
+            color: '#1DB954'
+        }
+    }];
+    
+    const dayDistributionLayout = {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(40,40,40,0.8)',
+        font: {
+            color: '#ffffff'
+        },
+        margin: {
+            l: 50,
+            r: 20,
+            b: 50,
+            t: 20
+        },
+        xaxis: {
+            title: 'Day of Week',
+            color: '#b3b3b3',
+            gridcolor: '#333333'
+        },
+        yaxis: {
+            title: 'Plays',
+            color: '#b3b3b3',
+            gridcolor: '#333333'
+        }
+    };
+    
+    Plotly.newPlot('day-distribution-chart', dayDistributionChartData, dayDistributionLayout, {displayModeBar: false, responsive: true});
+
+    // Create monthly distribution chart
+    // We'll use the listening history data we already have
+    const monthlyDistributionChartData = [{
+        x: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        y: Array(12).fill(0),
+        type: 'bar',
+        marker: {
+            color: '#1DB954'
+        }
+    }];
+
+    // Extract month from dates and count
+    if (historyData.dates && historyData.dates.length > 0) {
+        historyData.dates.forEach((date, index) => {
+            const month = parseInt(date.split('-')[1]) - 1; // 0-based month index
+            if (month >= 0 && month < 12) {
+                monthlyDistributionChartData[0].y[month] += historyData.counts[index];
+            }
+        });
+    }
+
+    const monthlyDistributionLayout = {
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(40,40,40,0.8)',
+        font: {
+            color: '#ffffff'
+        },
+        margin: {
+            l: 50,
+            r: 20,
+            b: 50,
+            t: 20
+        },
+        xaxis: {
+            title: 'Month',
+            color: '#b3b3b3',
+            gridcolor: '#333333'
+        },
+        yaxis: {
+            title: 'Plays',
+            color: '#b3b3b3',
+            gridcolor: '#333333'
+        }
+    };
+
+    Plotly.newPlot('monthly-distribution-chart', monthlyDistributionChartData, monthlyDistributionLayout, {displayModeBar: false, responsive: true});
+    
+    // Hide loading overlay when all charts are ready
+    const loadingOverlay = document.getElementById('loading-overlay');
+    loadingOverlay.style.opacity = '0';
+    setTimeout(function() {
+        loadingOverlay.style.display = 'none';
+    }, 500);
+});
+
+    // Handle per-page select change
+    document.getElementById('per-page-select').addEventListener('change', function() {
+        const currentUrl = new URL(window.location.href);
+        currentUrl.searchParams.set('per_page', this.value);
+        window.location.href = currentUrl.toString();
+    });
+
+    // Handle pattern switching
+    document.querySelectorAll('.pattern-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Remove active class from all buttons
+            document.querySelectorAll('.pattern-btn').forEach(b => b.classList.remove('active'));
+            // Add active class to clicked button
+            this.classList.add('active');
+            
+            // Hide all pattern charts
+            document.querySelectorAll('.pattern-chart').forEach(chart => chart.style.display = 'none');
+            
+            // Show the selected pattern chart
+            const pattern = this.getAttribute('data-pattern');
+            document.getElementById(`pattern-${pattern}`).style.display = 'block';
+            
+            // Trigger resize to ensure charts render properly
+            window.dispatchEvent(new Event('resize'));
+        });
+    });
+
+// Create skip rate comparison chart
+const skipRateData = [
+  {
+    x: ['This Track', 'Artist Average', 'Your Average'],
+    y: [{{ stats.skip_rate }}, {{ artist_avg_skip_rate|default(0) }}, {{ global_avg_skip_rate|default(0) }}],
+    type: 'bar',
+    marker: {
+      color: ['#1DB954', '#535353', '#b3b3b3']
+    }
+  }
+];
+
+const skipRateLayout = {
+  paper_bgcolor: 'rgba(0,0,0,0)',
+  plot_bgcolor: 'rgba(40,40,40,0.8)',
+  font: {
+    color: '#ffffff'
+  },
+  margin: {
+    l: 50,
+    r: 20,
+    b: 80,
+    t: 20
+  },
+  xaxis: {
+    title: '',
+    color: '#b3b3b3',
+    gridcolor: '#333333'
+  },
+  yaxis: {
+    title: 'Skip Rate (%)',
+    color: '#b3b3b3',
+    gridcolor: '#333333',
+    range: [0, Math.max({{ stats.skip_rate }}, {{ artist_avg_skip_rate|default(0) }}, {{ global_avg_skip_rate|default(0) }}) * 1.2]
+  }
+};
+
+Plotly.newPlot('skip-rate-chart', skipRateData, skipRateLayout, {displayModeBar: false, responsive: true});
+</script>
+{% endblock %}
+
