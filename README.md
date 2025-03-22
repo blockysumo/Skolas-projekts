@@ -42,7 +42,7 @@ A Flask-based web application that analyzes Spotify Extended Streaming History. 
 
 ### Installation
 
-1. **Clone repository:** (Run these commands in **Terminal/Command Prompt** in a directory where you want to store the project files, e.g., `Documents/Projects/`)
+1. **Clone repository:** (Run these commands in **Command Prompt/Terminal** in a directory where you want to store the project files, e.g., `Documents/Projects/`)
    ```sh
    git clone https://github.com/blockysumo/Skolas-projekts.git
    cd Skolas-projekts
