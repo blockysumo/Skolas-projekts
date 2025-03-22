@@ -6,7 +6,15 @@
 {% endblock %}
 
 {% block content %}
+<div id="loading-overlay" class="loading-overlay">
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <p class="loading-text">Analyzing your listening patterns...</p>
+    </div>
+</div>
+
 <h1 class="mb-4">Advanced Analytics</h1>
+
 <div class="row">
     <div class="col-md-3">
         <div class="card mb-4">
@@ -20,7 +28,6 @@
                       <select class="form-control" id="time-period">
                           <option value="all">All Time</option>
                           <option value="last_year">Last Year</option>
-                          <option value="last_month">Last Month</option>
                           <option value="custom">Custom Range</option>
                       </select>
                   </div>
@@ -49,22 +56,26 @@
     
     <div class="col-md-9">
         <div class="card mb-4">
-            <div class="card-header">
+            <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="card-title mb-0">Listening Patterns</h5>
+                <div class="btn-group" role="group" aria-label="Listening pattern views">
+                    <button type="button" class="btn btn-sm btn-outline-light pattern-btn active" data-pattern="daily">Daily</button>
+                    <button type="button" class="btn btn-sm btn-outline-light pattern-btn" data-pattern="hourly">Hourly</button>
+                    <button type="button" class="btn btn-sm btn-outline-light pattern-btn" data-pattern="monthly">Monthly</button>
+                </div>
             </div>
             <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <canvas id="daily-chart"></canvas>
-                    </div>
-                    <div class="col-md-6">
-                        <canvas id="hourly-chart"></canvas>
-                    </div>
+                <div id="pattern-daily" class="pattern-chart">
+                    <canvas id="daily-chart"></canvas>
+                    <p class="text-muted text-center mt-2">Your listening activity by day of the week</p>
                 </div>
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        <canvas id="monthly-chart"></canvas>
-                    </div>
+                <div id="pattern-hourly" class="pattern-chart" style="display: none;">
+                    <canvas id="hourly-chart"></canvas>
+                    <p class="text-muted text-center mt-2">Your listening activity by hour of the day</p>
+                </div>
+                <div id="pattern-monthly" class="pattern-chart" style="display: none;">
+                    <canvas id="monthly-chart"></canvas>
+                    <p class="text-muted text-center mt-2">Your listening activity by month of the year</p>
                 </div>
             </div>
         </div>
@@ -383,6 +394,52 @@
                     alert('An error occurred while fetching data.');
                 });
         });
+        
+        // Trigger initial load with default filters
+        document.getElementById('filter-form').dispatchEvent(new Event('submit'));
+    });
+
+// Handle pattern switching
+document.querySelectorAll('.pattern-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        // Remove active class from all buttons
+        document.querySelectorAll('.pattern-btn').forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        this.classList.add('active');
+        
+        // Hide all pattern charts
+        document.querySelectorAll('.pattern-chart').forEach(chart => chart.style.display = 'none');
+        
+        // Show the selected pattern chart
+        const pattern = this.getAttribute('data-pattern');
+        document.getElementById(`pattern-${pattern}`).style.display = 'block';
+    });
+});
+</script>
+<script>
+    // Hide loading overlay when charts are ready
+    document.addEventListener('DOMContentLoaded', function() {
+        // The existing code will initialize charts
+        // We'll hide the loading overlay after the initial data fetch completes
+        const originalDispatchEvent = document.getElementById('filter-form').dispatchEvent;
+        document.getElementById('filter-form').dispatchEvent = function(event) {
+            const result = originalDispatchEvent.call(this, event);
+            
+            // Add a listener to hide the loading overlay after the fetch completes
+            if (event.type === 'submit') {
+                const loadingOverlay = document.getElementById('loading-overlay');
+                
+                // Wait for fetch to complete (give it a minimum time to avoid flashing)
+                setTimeout(function() {
+                    loadingOverlay.style.opacity = '0';
+                    setTimeout(function() {
+                        loadingOverlay.style.display = 'none';
+                    }, 500);
+                }, 1000);
+            }
+            
+            return result;
+        };
         
         // Trigger initial load with default filters
         document.getElementById('filter-form').dispatchEvent(new Event('submit'));
