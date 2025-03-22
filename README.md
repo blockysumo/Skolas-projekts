@@ -1,4 +1,4 @@
-# Spotify Listening History Analyzer
+# 🎵 **Spotify Listening History Analyzer**
 
 A Flask-based web application that analyzes Spotify Extended Streaming History. Visualizes listening habits, shows top artists/tracks, and provides detailed statistics through dashboards.
 
@@ -6,16 +6,32 @@ A Flask-based web application that analyzes Spotify Extended Streaming History. 
 
 ## Features
 
-- **Upload Spotify Extended History ZIP**
-- **Interactive dashboards with visualizations:**
-  - Listening heatmap (day/hour)
-  - Top artists/tracks charts
-  - Monthly trends
-  - Content type distribution
-  - Skip rate analysis
-- **Paginated lists of all artists/tracks**
-- **Advanced filtering through API**
-- **Data export (CSV + PNGs)**
+### 🎵 **Spotify Data Processing**  
+- Upload a **Spotify Extended Streaming History** ZIP file.  
+- Automatically extracts and processes listening data.  
+- Stores everything in an **SQLite database** for fast queries.  
+
+### 📊 **Listening Insights & Visualizations**  
+- **Daily & Hourly Listening Patterns** – Heatmap of your activity.  
+- **Top Artists & Tracks** – Your most-played music and skip rates.  
+- **Monthly Trends** – See how your listening habits change over time.  
+- **Skip Rate Analysis** – Find out when you skip tracks the most.  
+- **Listening Duration Distribution** – Histogram of play session lengths.  
+- **Content Breakdown** – Pie chart showing music, podcasts, and audiobooks.  
+
+### 🔍 **Advanced Search & Filtering**  
+- Search and browse your **most-played artists and tracks**.  
+- Filter by **date range** to analyze past listening trends.  
+- View **detailed stats for any artist or track** (total plays, skip rate, first/last played).  
+
+### 📤 **Data Export & API Access**  
+- Download a **ZIP file** with your processed data and charts.  
+- API endpoints to query listening patterns, top tracks, and more.  
+
+### 🚀 **Optimized for Speed & Usability**  
+- Fast processing of large ZIP files.  
+- Paginated views for smooth browsing.  
+- Lightweight and easy to set up with **Flask + SQLite**.  
 
 ## Getting Started
 
