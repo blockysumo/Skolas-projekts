@@ -2,6 +2,8 @@
 
 A Flask-based web application that analyzes Spotify Extended Streaming History. Visualizes listening habits, shows top artists/tracks, and provides detailed statistics through dashboards.
 
+![Image](https://github.com/user-attachments/assets/123ae8ac-da6e-40be-837a-82af68022c85)
+
 ## Features
 
 - **Upload Spotify Extended History ZIP**
