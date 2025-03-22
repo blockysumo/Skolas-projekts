@@ -82,7 +82,11 @@
         <tbody>
             {% for artist in artists %}
             <tr>
-                <td>{{ artist.artist_name }}</td>
+                <td>
+                    <a href="{{ url_for('artist_detail', artist_name=artist.artist_name) }}" class="artist-link">
+                        {{ artist.artist_name }}
+                    </a>
+                </td>
                 <td>{{ artist.plays }}</td>
                 <td>{{ artist.total_time_formatted }}</td>
                 <td>{{ artist.skip_rate }}%</td>
