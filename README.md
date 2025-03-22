@@ -47,7 +47,7 @@ A Flask-based web application that analyzes Spotify Extended Streaming History. 
    git clone https://github.com/blockysumo/Skolas-projekts.git
    cd Skolas-projekts
    ```
-2. **Create virtual environment:** (Run in **Terminal/Command Prompt** inside the `Skolas-projekts` directory)
+2. **Create virtual environment:** (Run in **Command Prompt/Terminal** inside the `Skolas-projekts` directory)
    ```sh
    python -m venv venv
    ```
@@ -59,11 +59,11 @@ A Flask-based web application that analyzes Spotify Extended Streaming History. 
      ```sh
      venv\Scripts\activate
      ```
-3. **Install requirements:** (Run in **Terminal/Command Prompt** inside the activated virtual environment)
+3. **Install requirements:** (Run in **Command Prompt/Terminal** inside the activated virtual environment)
    ```sh
    pip install -r requirements.txt
    ```
-4. **Run the application:** (Run in **Terminal/Command Prompt** inside `Skolas-projekts` directory)
+4. **Run the application:** (Run in **Command Prompt/Terminal** inside `Skolas-projekts` directory)
    ```sh
    python app.py
    ```
