@@ -1,6 +1,13 @@
 {% extends 'layout.html' %}
 
 {% block content %}
+<div id="loading-overlay" class="loading-overlay">
+    <div class="spinner-container">
+        <div class="spinner"></div>
+        <p class="loading-text">Generating your Spotify insights...</p>
+    </div>
+</div>
+
 <h1 class="mb-4">Your Listening Dashboard</h1>
 
 <div class="row">
@@ -131,5 +138,15 @@
         <i class="fas fa-file-export mr-1"></i> Export Data
     </a>
 </div>
-{% endblock %}
 
+<script>
+    // Hide loading overlay when all images are loaded
+    window.addEventListener('load', function() {
+        const loadingOverlay = document.getElementById('loading-overlay');
+        loadingOverlay.style.opacity = '0';
+        setTimeout(function() {
+            loadingOverlay.style.display = 'none';
+        }, 500);
+    });
+</script>
+{% endblock %}
